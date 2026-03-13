@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Cold Cut Combo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Courier New', monospace; background: #1a1a1a; color: #f0ece4; min-height: 100vh; }
+
+/* Header */
+#header { background: #111; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 100; }
+#header-inner { max-width: 720px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand-name { font-size: 17px; font-weight: 700; color: #d4aa4e; letter-spacing: .05em; text-transform: uppercase; }
+.brand-sub { font-size: 11px; color: #999; letter-spacing: .12em; text-transform: uppercase; }
+nav { display: flex; gap: 6px; }
+.nav-btn { background: none; border: 1px solid #444; color: #ccc; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; font-family: inherit; }
+.nav-btn.active { border-color: #d4aa4e; color: #d4aa4e; background: rgba(212,170,78,.12); }
+
+/* Main */
+main { max-width: 720px; margin: 0 auto; padding: 18px 16px; }
+
+/* Toolbar */
+.toolbar { display: flex; gap: 8px; margin-bottom: 10px; }
+.search-input { flex: 1; background: #242424; border: 1px solid #444; border-radius: 6px; padding: 11px 14px; color: #f0ece4; font-size: 16px; font-family: inherit; outline: none; }
+.add-btn { display: flex; align-items: center; gap: 6px; background: #d4aa4e; border: none; color: #111; padding: 11px 16px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 700; font-family: inherit; white-space: nowrap; }
+.count-bar { font-size: 13px; color: #999; margin-bottom: 12px; }
+.import-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.import-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .06em; }
+.import-btn { background: #242424; border: 1px solid #444; color: #ccc; padding: 7px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: inherit; }
+.import-btn:hover { border-color: #d4aa4e; color: #d4aa4e; }
+#import-drop-zone { border: 2px dashed #333; border-radius: 8px; padding: 12px; text-align: center; font-size: 13px; color: #555; margin-bottom: 12px; transition: all .2s; }
+#import-drop-zone.drag-over { border-color: #d4aa4e; color: #d4aa4e; background: rgba(212,170,78,.06); }
+code { background: #2a2a2a; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+/* Song list */
+.song-list { display: flex; flex-direction: column; gap: 8px; }
+.song-card { background: #222; border: 1px solid #3a3a3a; border-radius: 10px; overflow: hidden; }
+.song-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; gap: 10px; }
+.song-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+.key-stack { display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0; }
+.song-key { background: #d4aa4e; color: #111; border-radius: 6px; padding: 6px 10px; font-size: 16px; font-weight: 700; min-width: 36px; text-align: center; }
+.orig-key { font-size: 11px; color: #bbb; white-space: nowrap; }
+.song-title { font-size: 17px; font-weight: 600; color: #f0ece4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.song-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.scale-pill { font-size: 12px; color: #bbb; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; padding: 2px 8px; }
+.guitar-pill { font-size: 12px; color: #d4aa4e; background: rgba(212,170,78,.12); border: 1px solid rgba(212,170,78,.35); border-radius: 4px; padding: 2px 8px; }
+.song-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.icon-btn { background: none; border: none; color: #888; cursor: pointer; padding: 6px 8px; border-radius: 4px; font-size: 18px; line-height: 1; }
+.delete-btn { color: #c05050; }
+.chevron { font-size: 16px; transition: transform .2s; display: inline-block; color: #888; }
+.chevron.open { transform: rotate(180deg); }
+
+/* Song detail */
+.song-detail { border-top: 1px solid #333; padding: 14px 16px; background: #1e1e1e; }
+.song-notes { font-size: 14px; color: #bbb; margin-bottom: 14px; font-style: italic; }
+.detail-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+.detail-block { flex: 1; min-width: 160px; }
+.detail-label { font-size: 11px; color: #888; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+.note-row { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.note-badge { background: #2e2e2e; border: 1px solid #444; border-radius: 5px; padding: 4px 9px; font-size: 14px; color: #f0ece4; }
+.small-btn { background: none; border: 1px solid #555; color: #d4aa4e; padding: 7px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; font-family: inherit; }
+
+/* Controls */
+.control-row { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.control-group { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 5px; }
+label.ctrl-label { font-size: 12px; color: #aaa; letter-spacing: .08em; text-transform: uppercase; }
+select, input[type=text], textarea { background: #242424; border: 1px solid #444; border-radius: 6px; color: #f0ece4; padding: 11px 12px; font-size: 15px; font-family: inherit; outline: none; width: 100%; cursor: pointer; }
+textarea { min-height: 64px; resize: vertical; }
+
+/* Scale preview */
+.scale-preview { background: #222; border: 1px solid #3a3a3a; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.scale-preview-label { font-size: 13px; color: #aaa; margin-right: 4px; white-space: nowrap; }
+.note-badge.clickable { cursor: pointer; }
+.note-badge.selected { background: #d4aa4e; color: #111; border-color: #d4aa4e; }
+
+/* Buttons */
+.calc-btn { display: flex; align-items: center; gap: 8px; background: #d4aa4e; border: none; color: #111; padding: 13px 22px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 700; font-family: inherit; margin-bottom: 18px; }
+.play-mel-btn { display: flex; align-items: center; gap: 6px; background: #2a2a2a; border: 1px solid #555; color: #f0ece4; padding: 11px 16px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: 600; font-family: inherit; margin-bottom: 18px; margin-left: 8px; }
+.play-btn { background: #2a2a2a; border: 1px solid #555; color: #f0ece4; border-radius: 5px; padding: 6px 10px; cursor: pointer; font-size: 14px; line-height: 1; }
+.play-both-btn { background: #2a3a2a; border: 1px solid #4a6a4a; color: #8dc88d; }
+.btn-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 18px; }
+
+/* Results */
+.results { background: #222; border: 1px solid #3a3a3a; border-radius: 10px; overflow: hidden; }
+.result-header { padding: 12px 16px; font-size: 14px; color: #bbb; border-bottom: 1px solid #333; }
+.tabs { display: flex; border-bottom: 1px solid #333; }
+.tab { flex: 1; background: none; border: none; color: #999; padding: 12px; font-size: 13px; cursor: pointer; font-family: inherit; letter-spacing: .05em; text-transform: uppercase; }
+.tab.active { color: #d4aa4e; border-bottom: 2px solid #d4aa4e; }
+.harm-table { padding: 14px 16px; display: flex; flex-direction: column; gap: 18px; }
+.harm-group-label { font-size: 12px; color: #888; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+.harm-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #2a2a2a; flex-wrap: wrap; }
+.harm-note { font-size: 22px; font-weight: 700; color: #f0ece4; min-width: 36px; }
+.harm-degree { flex: 1; font-size: 14px; color: #bbb; min-width: 80px; }
+.harm-interval { font-size: 14px; color: #d4aa4e; min-width: 52px; }
+.harm-tag { font-size: 12px; padding: 3px 8px; border-radius: 4px; color: #fff; }
+.chord-tone-box { padding: 18px 16px; }
+.chord-label { font-size: 14px; color: #bbb; margin-bottom: 12px; }
+.note-badge-lg { background: #2e2e2e; border: 1px solid #444; border-radius: 6px; padding: 10px 16px; font-size: 17px; font-weight: 600; color: #f0ece4; text-align: center; min-width: 48px; }
+.note-badge-lg.melody { background: #d4aa4e; color: #111; border-color: #d4aa4e; }
+.chord-hint { font-size: 13px; color: #888; margin-top: 14px; line-height: 1.6; }
+.scale-box { padding: 4px 0; }
+.scale-row { display: flex; align-items: center; gap: 14px; padding: 10px 16px; }
+.scale-row.even { background: #222; }
+.scale-row.melody-row { background: #d4aa4e; }
+.scale-row.melody-row .scale-note, .scale-row.melody-row .scale-deg { color: #111; }
+.scale-deg { font-size: 13px; color: #888; min-width: 18px; text-align: right; }
+.scale-note { font-size: 17px; font-weight: 600; color: #f0ece4; }
+.melody-tag { font-size: 13px; color: #111; }
+.empty { color: #888; font-size: 15px; padding: 24px 0; text-align: center; }
+
+/* Modal */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 16px; }
+.modal { background: #242424; border: 1px solid #444; border-radius: 12px; padding: 22px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
+.modal h3 { font-size: 18px; font-weight: 700; color: #d4aa4e; margin-bottom: 18px; }
+.modal input[type=text], .modal select, .modal textarea { margin-bottom: 12px; }
+.check-row { display: flex; align-items: center; font-size: 15px; color: #ccc; margin-bottom: 16px; cursor: pointer; gap: 8px; }
+.modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+.cancel-btn { background: none; border: 1px solid #555; color: #ccc; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: inherit; }
+.save-btn { background: #d4aa4e; border: none; color: #111; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 700; font-family: inherit; }
+
+/* Playing banner */
+#playing-banner { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 9999; background: #d4aa4e; color: #111; text-align: center; padding: 8px; font-size: 15px; font-weight: 700; }
+
+.section-title { font-size: 20px; font-weight: 600; color: #d4aa4e; margin-bottom: 16px; margin-top: 4px; }
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: #f0ece4; padding: 10px 20px; border-radius: 8px; font-size: 14px; opacity: 0; transition: all .3s; white-space: nowrap; z-index: 9999; pointer-events: none; }
+.toast.toast-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div id="playing-banner">🔊 Playing…</div>
+
+<div id="header">
+  <div id="header-inner">
+    <div>
+      <div class="brand-name">Cold Cut Combo</div>
+      <div class="brand-sub">Song Manager</div>
+    </div>
+    <nav>
+      <button class="nav-btn active" id="btn-songs" onclick="showView('songs')">Songs</button>
+      <button class="nav-btn" id="btn-harmony" onclick="showView('harmony')">Harmony</button>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <!-- SONGS VIEW -->
+  <div id="view-songs">
+    <div class="toolbar">
+      <input class="search-input" type="text" placeholder="Search songs or keys…" oninput="renderSongs()" id="search-input">
+      <button class="add-btn" onclick="openNewSong()">+ Add Song</button>
+    </div>
+    <div class="import-bar">
+      <span class="import-label">Import:</span>
+      <button class="import-btn" onclick="document.getElementById('chordpro-file-input').click()">📄 ChordPro file</button>
+      <button class="import-btn" onclick="openBulkModal()">📋 Paste list</button>
+      <input type="file" id="chordpro-file-input" accept=".cho,.pro,.chordpro,.txt" multiple style="display:none" onchange="importChordProFiles(this.files)">
+    </div>
+    <div id="import-drop-zone">Drop ChordPro files here</div>
+    <div class="count-bar" id="count-bar"></div>
+    <div class="song-list" id="song-list"></div>
+  </div>
+
+  <!-- HARMONY VIEW -->
+  <div id="view-harmony" style="display:none">
+    <div class="section-title">Harmony Assistant</div>
+    <div class="control-row">
+      <div class="control-group">
+        <label class="ctrl-label">Root Key</label>
+        <select id="harm-key" onchange="onHarmChange()"></select>
+      </div>
+      <div class="control-group">
+        <label class="ctrl-label">Scale / Mode</label>
+        <select id="harm-scale" onchange="onHarmChange()"></select>
+      </div>
+    </div>
+    <div class="scale-preview" id="scale-preview"></div>
+    <div class="control-row">
+      <div class="control-group">
+        <label class="ctrl-label">Melody Note</label>
+        <select id="harm-melody" onchange="harmResult=null;renderHarmResults()"></select>
+      </div>
+      <div class="control-group">
+        <label class="ctrl-label">Octave</label>
+        <select id="harm-octave">
+          <option value="3">3 — low</option>
+          <option value="4" selected>4 — mid</option>
+          <option value="5">5 — high</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label class="ctrl-label">Chord Type</label>
+        <select id="harm-chord"></select>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="calc-btn" onclick="calcHarmony()">🎤 Get Harmonies</button>
+      <button class="play-mel-btn" id="play-mel-btn" onclick="doPlayMelody()" style="display:none">▶ Melody</button>
+    </div>
+    <div id="harm-results"></div>
+  </div>
+</main>
+
+<!-- BULK PASTE MODAL -->
+<div class="overlay" id="bulk-modal" style="display:none" onclick="if(event.target===this)closeBulkModal()">
+  <div class="modal" style="max-width:520px">
+    <h3>Paste Song List</h3>
+    <p style="font-size:13px;color:#aaa;margin-bottom:14px;line-height:1.6">
+      Paste one song per line. Supported formats:<br>
+      <code>Title - Key</code> &nbsp;e.g. <code>Jolene - A</code><br>
+      <code>Title (Key)</code> &nbsp;e.g. <code>Jolene (A)</code><br>
+      <code>Title</code> &nbsp;(key will default to C)
+    </p>
+    <textarea id="bulk-text" placeholder="Jolene - A&#10;Wagon Wheel - D&#10;Midnight Rider - G" style="min-height:140px;margin-bottom:12px;font-size:14px"></textarea>
+    <div id="bulk-preview" style="margin-bottom:12px"></div>
+    <div class="modal-btns">
+      <button class="cancel-btn" onclick="closeBulkModal()">Cancel</button>
+      <button class="save-btn" onclick="importBulk()">Import Songs</button>
+    </div>
+  </div>
+</div>
+
+<!-- SONG FORM MODAL -->
+<div class="overlay" id="song-modal" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3 id="modal-title">Add Song</h3>
+    <label class="ctrl-label">Title</label>
+    <input type="text" id="form-title" placeholder="Song title" style="margin-bottom:12px">
+    <div class="control-row">
+      <div class="control-group">
+        <label class="ctrl-label">Original Key</label>
+        <select id="form-key"></select>
+      </div>
+      <div class="control-group">
+        <label class="ctrl-label">We Play It In</label>
+        <select id="form-perf-key"></select>
+      </div>
+    </div>
+    <div class="control-group" style="margin-bottom:12px">
+      <label class="ctrl-label">Scale / Mode</label>
+      <select id="form-scale"></select>
+    </div>
+    <label class="check-row">
+      <input type="checkbox" id="form-guitar"> Steve plays guitar on this song
+    </label>
+    <label class="ctrl-label">Notes</label>
+    <textarea id="form-notes" placeholder="Any notes about this song…" style="margin-bottom:16px"></textarea>
+    <div class="modal-btns">
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+      <button class="save-btn" onclick="saveSong()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Music Theory ─────────────────────────────────────────────────────────────
+const NOTES = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const NOTE_ALIASES = {"Db":"C#","Eb":"D#","Fb":"E","Gb":"F#","Ab":"G#","Bb":"A#","Cb":"B"};
+const SCALES = {
+  "Major":[0,2,4,5,7,9,11],"Natural Minor":[0,2,3,5,7,8,10],
+  "Dorian":[0,2,3,5,7,9,10],"Mixolydian":[0,2,4,5,7,9,10],
+  "Lydian":[0,2,4,6,7,9,11],"Phrygian":[0,1,3,5,7,8,10],
+  "Pentatonic Maj":[0,2,4,7,9],"Pentatonic Min":[0,3,5,7,10],
+  "Blues":[0,3,5,6,7,10],"Harmonic Minor":[0,2,3,5,7,8,11]
+};
+const CHORD_FORMULAS = {
+  "Major":[0,4,7],"Minor":[0,3,7],"Dom7":[0,4,7,10],
+  "Maj7":[0,4,7,11],"Min7":[0,3,7,10],"Sus2":[0,2,7],
+  "Sus4":[0,5,7],"Dim":[0,3,6],"Aug":[0,4,8]
+};
+const INTERVAL_NAMES = {0:"Unison",1:"m2",2:"M2",3:"m3",4:"M3",5:"P4",6:"TT",7:"P5",8:"m6",9:"M6",10:"m7",11:"M7",12:"Octave"};
+
+function noteIdx(n) { return NOTES.indexOf(NOTE_ALIASES[n]||n); }
+function noteAt(root, st) { return NOTES[(noteIdx(root)+st+120)%12]; }
+function scaleNotes(root, scaleName) { return (SCALES[scaleName]||SCALES["Major"]).map(s=>noteAt(root,s)); }
+function chordTones(root, chordType) { return (CHORD_FORMULAS[chordType]||CHORD_FORMULAS["Major"]).map(s=>noteAt(root,s)); }
+function getHarmonies(melNote, root, scaleName) {
+  const sn = scaleNotes(root, scaleName);
+  const mi = sn.indexOf(melNote);
+  if (mi===-1) return null;
+  const results=[];
+  for (const iv of [-3,-2,-1,1,2,3]) {
+    const ti = mi+iv;
+    if (ti>=0 && ti<sn.length) {
+      const hn = sn[ti];
+      const st = (noteIdx(hn)-noteIdx(melNote)+12)%12;
+      const adj = iv<0 ? st-12 : st;
+      results.push({note:hn, scaleDegree:iv>0?`+${iv}`:`${iv}`, semitones:adj, intervalName:INTERVAL_NAMES[Math.abs(adj)]||"?", direction:iv>0?"above":"below"});
+    }
+  }
+  return results;
+}
+
+// ── Audio ─────────────────────────────────────────────────────────────────────
+const NOTE_FREQS = {
+  "C3":130.81,"C#3":138.59,"D3":146.83,"D#3":155.56,"E3":164.81,"F3":174.61,
+  "F#3":185.00,"G3":196.00,"G#3":207.65,"A3":220.00,"A#3":233.08,"B3":246.94,
+  "C4":261.63,"C#4":277.18,"D4":293.66,"D#4":311.13,"E4":329.63,"F4":349.23,
+  "F#4":369.99,"G4":392.00,"G#4":415.30,"A4":440.00,"A#4":466.16,"B4":493.88,
+  "C5":523.25,"C#5":554.37,"D5":587.33,"D#5":622.25,"E5":659.25,"F5":698.46,
+  "F#5":739.99,"G5":783.99,"G#5":830.61,"A5":880.00,"A#5":932.33,"B5":987.77
+};
+function nf(note, oct) { return NOTE_FREQS[note+oct] || NOTE_FREQS[note+"4"] || 440; }
+
+const SR = 22050;
+function makeWav(freqs, offsets, dur=1.4) {
+  const total = Math.floor(SR*(dur+Math.max(0,...offsets)));
+  const pcm = new Int16Array(total);
+  for (let v=0;v<freqs.length;v++) {
+    const s0=Math.floor(offsets[v]*SR), s1=Math.min(total,s0+Math.floor(dur*SR));
+    const fi=Math.floor(SR*.05), fo=Math.floor(SR*.18);
+    for (let i=s0;i<s1;i++) {
+      const pos=i-s0, rem=s1-i;
+      let e=0.5;
+      if(pos<fi) e*=pos/fi; else if(rem<fo) e*=rem/fo;
+      const v2=Math.sin(2*Math.PI*freqs[v]*(pos/SR))*e;
+      pcm[i]=Math.max(-32767,Math.min(32767,pcm[i]+Math.round(v2*32767)));
+    }
+  }
+  const db=total*2, buf=new Uint8Array(44+db), dv=new DataView(buf.buffer);
+  const ws=(o,t)=>{for(let i=0;i<t.length;i++)dv.setUint8(o+i,t.charCodeAt(i));};
+  ws(0,"RIFF");dv.setUint32(4,36+db,true);ws(8,"WAVEfmt ");
+  dv.setUint32(16,16,true);dv.setUint16(20,1,true);dv.setUint16(22,1,true);
+  dv.setUint32(24,SR,true);dv.setUint32(28,SR*2,true);
+  dv.setUint16(32,2,true);dv.setUint16(34,16,true);
+  ws(36,"data");dv.setUint32(40,db,true);
+  buf.set(new Uint8Array(pcm.buffer),44);
+  let bin="";
+  for(let i=0;i<buf.length;i+=8192) bin+=String.fromCharCode(...buf.subarray(i,i+8192));
+  return "data:audio/wav;base64,"+btoa(bin);
+}
+
+let bannerTimer=null;
+function flashBanner() {
+  const b=document.getElementById("playing-banner");
+  b.style.display="block";
+  clearTimeout(bannerTimer);
+  bannerTimer=setTimeout(()=>b.style.display="none",1800);
+}
+
+function playNote(note, oct) {
+  flashBanner();
+  const a=new Audio(makeWav([nf(note,oct)],[0]));
+  a.play().catch(e=>console.warn(e));
+}
+
+function playInterval(mn, hn, mo, ho) {
+  flashBanner();
+  const a=new Audio(makeWav([nf(mn,mo),nf(hn,ho)],[0,0.7]));
+  a.play().catch(e=>console.warn(e));
+}
+
+// ── State ────────────────────────────────────────────────────────────────────
+let songs = [
+  {id:1,title:"Jolene",key:"A",performanceKey:"F#",steveGuitar:true,scale:"Natural Minor",notes:"Classic Dolly Parton"},
+  {id:2,title:"Wagon Wheel",key:"D",performanceKey:"",steveGuitar:true,scale:"Major",notes:""},
+  {id:3,title:"Midnight Rider",key:"G",performanceKey:"",steveGuitar:false,scale:"Major",notes:""}
+];
+let editingId = null;
+let expandedId = null;
+let harmResult = null;
+let activeTab = "harmonies";
+let currentView = "songs";
+
+// ── Init selects ─────────────────────────────────────────────────────────────
+function populateSelect(id, options, selectedVal) {
+  const sel = document.getElementById(id);
+  sel.innerHTML = options.map(o=>`<option value="${o}"${o==selectedVal?" selected":""}>${o}</option>`).join("");
+}
+
+function initSelects() {
+  populateSelect("harm-key", NOTES, "C");
+  populateSelect("harm-scale", Object.keys(SCALES), "Major");
+  populateSelect("harm-chord", Object.keys(CHORD_FORMULAS), "Major");
+  const melSel = document.getElementById("harm-melody");
+  melSel.innerHTML = '<option value="">— pick —</option>';
+  populateSelect("form-key", NOTES, "C");
+  const perfOpts = [""].concat(NOTES);
+  const perfSel = document.getElementById("form-perf-key");
+  perfSel.innerHTML = `<option value="">Same as original</option>`+NOTES.map(n=>`<option value="${n}">${n}</option>`).join("");
+  populateSelect("form-scale", Object.keys(SCALES), "Major");
+}
+
+// ── Views ────────────────────────────────────────────────────────────────────
+function showView(v) {
+  currentView = v;
+  document.getElementById("view-songs").style.display = v==="songs"?"block":"none";
+  document.getElementById("view-harmony").style.display = v==="harmony"?"block":"none";
+  document.getElementById("btn-songs").className = "nav-btn"+(v==="songs"?" active":"");
+  document.getElementById("btn-harmony").className = "nav-btn"+(v==="harmony"?" active":"");
+  if (v==="harmony") renderScalePreview();
+}
+
+// ── Songs ────────────────────────────────────────────────────────────────────
+function renderSongs() {
+  const q = document.getElementById("search-input").value.toLowerCase();
+  const filtered = songs.filter(s=>
+    s.title.toLowerCase().includes(q)||
+    s.key.toLowerCase().includes(q)||
+    (s.performanceKey||"").toLowerCase().includes(q)
+  );
+  document.getElementById("count-bar").textContent = `${filtered.length} song${filtered.length!==1?"s":""}${q?` matching "${q}"`:""}`;
+  const list = document.getElementById("song-list");
+  if (!filtered.length) { list.innerHTML='<div class="empty">No songs yet — add one above.</div>'; return; }
+  list.innerHTML = filtered.map(s=>{
+    const dispKey = s.performanceKey||s.key;
+    const showOrig = s.performanceKey && s.performanceKey!==s.key;
+    const sn = scaleNotes(s.performanceKey||s.key, s.scale).join(" ");
+    const expanded = expandedId===s.id;
+    return `<div class="song-card">
+      <div class="song-row" onclick="toggleExpand(${s.id})">
+        <div class="song-left">
+          <div class="key-stack">
+            <div class="song-key">${dispKey}</div>
+            ${showOrig?`<div class="orig-key">orig: ${s.key}</div>`:""}
+          </div>
+          <div>
+            <div class="song-title">${s.title}</div>
+            <div class="song-meta">
+              <span class="scale-pill">${s.scale}</span>
+              ${s.steveGuitar?'<span class="guitar-pill">🎸 Steve guitar</span>':""}
+            </div>
+          </div>
+        </div>
+        <div class="song-right">
+          <button class="icon-btn" onclick="event.stopPropagation();editSong(${s.id})">✏️</button>
+          <button class="icon-btn delete-btn" onclick="event.stopPropagation();deleteSong(${s.id})">🗑</button>
+          <span class="chevron ${expanded?"open":""}">▾</span>
+        </div>
+      </div>
+      ${expanded?`<div class="song-detail">
+        ${s.notes?`<p class="song-notes">${s.notes}</p>`:""}
+        <div class="detail-grid">
+          <div class="detail-block">
+            <div class="detail-label">Scale Notes</div>
+            <div class="note-row">${scaleNotes(s.performanceKey||s.key,s.scale).map(n=>`<span class="note-badge">${n}</span>`).join("")}</div>
+          </div>
+          <div class="detail-block">
+            <div class="detail-label">Quick Harmony</div>
+            <button class="small-btn" onclick="openHarmonyForSong(${s.id})">Open in Harmony →</button>
+          </div>
+        </div>
+      </div>`:""}
+    </div>`;
+  }).join("");
+}
+
+function toggleExpand(id) { expandedId = expandedId===id?null:id; renderSongs(); }
+function deleteSong(id) { songs=songs.filter(s=>s.id!==id); if(expandedId===id)expandedId=null; renderSongs(); }
+function openHarmonyForSong(id) {
+  const s=songs.find(s=>s.id===id);
+  if(!s)return;
+  document.getElementById("harm-key").value = s.performanceKey||s.key;
+  document.getElementById("harm-scale").value = s.scale;
+  onHarmChange();
+  showView("harmony");
+}
+
+// ── Song form ─────────────────────────────────────────────────────────────────
+function openNewSong() {
+  editingId=null;
+  document.getElementById("modal-title").textContent="Add Song";
+  document.getElementById("form-title").value="";
+  document.getElementById("form-key").value="C";
+  document.getElementById("form-perf-key").value="";
+  document.getElementById("form-scale").value="Major";
+  document.getElementById("form-guitar").checked=false;
+  document.getElementById("form-notes").value="";
+  document.getElementById("song-modal").style.display="flex";
+}
+function editSong(id) {
+  const s=songs.find(s=>s.id===id); if(!s)return;
+  editingId=id;
+  document.getElementById("modal-title").textContent="Edit Song";
+  document.getElementById("form-title").value=s.title;
+  document.getElementById("form-key").value=s.key;
+  document.getElementById("form-perf-key").value=s.performanceKey||"";
+  document.getElementById("form-scale").value=s.scale;
+  document.getElementById("form-guitar").checked=s.steveGuitar;
+  document.getElementById("form-notes").value=s.notes||"";
+  document.getElementById("song-modal").style.display="flex";
+}
+function saveSong() {
+  const title=document.getElementById("form-title").value.trim();
+  if(!title)return;
+  const song={
+    id:editingId||Date.now(), title,
+    key:document.getElementById("form-key").value,
+    performanceKey:document.getElementById("form-perf-key").value,
+    scale:document.getElementById("form-scale").value,
+    steveGuitar:document.getElementById("form-guitar").checked,
+    notes:document.getElementById("form-notes").value
+  };
+  if(editingId) songs=songs.map(s=>s.id===editingId?song:s);
+  else songs=[...songs,song];
+  closeModal(); renderSongs();
+}
+function closeModal() { document.getElementById("song-modal").style.display="none"; }
+
+// ── Harmony ──────────────────────────────────────────────────────────────────
+function onHarmChange() {
+  harmResult=null;
+  renderScalePreview();
+  renderMelodySelect();
+  document.getElementById("harm-results").innerHTML="";
+  document.getElementById("play-mel-btn").style.display="none";
+}
+
+function renderScalePreview() {
+  const key=document.getElementById("harm-key").value;
+  const scale=document.getElementById("harm-scale").value;
+  const mel=document.getElementById("harm-melody").value;
+  const sn=scaleNotes(key,scale);
+  document.getElementById("scale-preview").innerHTML=
+    `<span class="scale-preview-label">${key} ${scale}:</span>`+
+    sn.map(n=>`<span class="note-badge clickable ${n===mel?"selected":""}" onclick="selectMelody('${n}')">${n}</span>`).join("");
+}
+
+function renderMelodySelect() {
+  const key=document.getElementById("harm-key").value;
+  const scale=document.getElementById("harm-scale").value;
+  const sn=scaleNotes(key,scale);
+  const mel=document.getElementById("harm-melody").value;
+  const sel=document.getElementById("harm-melody");
+  sel.innerHTML=`<option value="">— pick —</option>`+sn.map(n=>`<option value="${n}"${n===mel?" selected":""}>${n}</option>`).join("");
+}
+
+function selectMelody(note) {
+  document.getElementById("harm-melody").value=note;
+  harmResult=null;
+  renderScalePreview();
+  document.getElementById("harm-results").innerHTML="";
+  document.getElementById("play-mel-btn").style.display="none";
+}
+
+function calcHarmony() {
+  const mel=document.getElementById("harm-melody").value;
+  if(!mel)return;
+  const key=document.getElementById("harm-key").value;
+  const scale=document.getElementById("harm-scale").value;
+  const chord=document.getElementById("harm-chord").value;
+  harmResult={
+    harmonies:getHarmonies(mel,key,scale),
+    chordTones:chordTones(key,chord),
+    scale:scaleNotes(key,scale)
+  };
+  activeTab="harmonies";
+  document.getElementById("play-mel-btn").style.display="flex";
+  renderHarmResults();
+}
+
+function setTab(t) { activeTab=t; renderHarmResults(); }
+
+function doPlayMelody() {
+  const mel=document.getElementById("harm-melody").value;
+  const oct=parseInt(document.getElementById("harm-octave").value);
+  if(mel) playNote(mel,oct);
+}
+
+function renderHarmResults() {
+  const mel=document.getElementById("harm-melody").value;
+  const key=document.getElementById("harm-key").value;
+  const scale=document.getElementById("harm-scale").value;
+  const oct=parseInt(document.getElementById("harm-octave").value);
+  if(!harmResult){document.getElementById("harm-results").innerHTML="";return;}
+
+  const tabs=["harmonies","chordtones","scale"];
+  let html=`<div class="results">
+    <div class="result-header">Melody: <strong>${mel}</strong> · Key of ${key} ${scale}</div>
+    <div class="tabs">${tabs.map(t=>`<button class="tab ${activeTab===t?"active":""}" onclick="setTab('${t}')">${t==="harmonies"?"Harmonies":t==="chordtones"?"Chord Tones":"Scale"}</button>`).join("")}</div>`;
+
+  if(activeTab==="harmonies") {
+    if(!harmResult.harmonies) { html+=`<div class="empty">Note not found in this scale.</div>`; }
+    else {
+      html+=`<div class="harm-table">`;
+      for(const dir of ["above","below"]) {
+        const label=dir==="above"?"Above melody (Steve sings low)":"Below melody (Steve sings high)";
+        const rows=harmResult.harmonies.filter(h=>h.direction===dir);
+        html+=`<div><div class="harm-group-label">${label}</div>`;
+        for(const h of rows) {
+          const hOct = dir==="above"?oct:oct-1;
+          const tagColor=h.semitones>0&&h.semitones<=4?"#2a6":dir==="above"?"#a62":"#447";
+          html+=`<div class="harm-row">
+            <span class="harm-note">${h.note}</span>
+            <span class="harm-degree">${h.scaleDegree} degree</span>
+            <span class="harm-interval">${h.intervalName}</span>
+            <span class="harm-tag" style="background:${tagColor}">${h.semitones>0?"+":""}${h.semitones}st</span>
+            <button class="play-btn" onclick="playNote('${h.note}',${hOct})">▶</button>
+            <button class="play-btn play-both-btn" onclick="playInterval('${mel}','${h.note}',${oct},${hOct})">♫</button>
+          </div>`;
+        }
+        html+=`</div>`;
+      }
+      html+=`</div>`;
+    }
+  } else if(activeTab==="chordtones") {
+    const chord=document.getElementById("harm-chord").value;
+    const key2=document.getElementById("harm-key").value;
+    html+=`<div class="chord-tone-box">
+      <div class="chord-label">${key2} ${chord}</div>
+      <div class="note-row">${harmResult.chordTones.map(n=>`<span class="note-badge-lg ${n===mel?"melody":""}">${n}${n===mel?'<br><small>melody</small>':""}</span>`).join("")}</div>
+      <div class="chord-hint">Harmonies on chord tones are most stable. Notes in chord + scale both work well.</div>
+    </div>`;
+  } else {
+    html+=`<div class="scale-box">${harmResult.scale.map((n,i)=>`
+      <div class="scale-row ${n===mel?"melody-row":i%2===0?"even":""}">
+        <span class="scale-deg">${i+1}</span>
+        <span class="scale-note">${n}</span>
+        ${n===mel?'<span class="melody-tag">← melody</span>':""}
+      </div>`).join("")}</div>`;
+  }
+
+  html+=`</div>`;
+  document.getElementById("harm-results").innerHTML=html;
+}
+
+// ── ChordPro Import ───────────────────────────────────────────────────────────
+function parseChordPro(text) {
+  // Extract {title:}, {key:}, {t:}, {k:} directives
+  const title = (text.match(/\{(?:title|t):\s*([^}]+)\}/i)||[])[1]?.trim() || "";
+  const rawKey = (text.match(/\{key:\s*([^}]+)\}/i)||[])[1]?.trim() || "";
+  const key = normalizeChordProKey(rawKey) || "C";
+  return { title, key };
+}
+
+function normalizeChordProKey(k) {
+  if (!k) return "";
+  // Strip "m" suffix for minor — we track scale separately
+  const base = k.replace(/m$/, "").trim();
+  // Map flat notation to sharps our app uses
+  const flatMap = {"Db":"C#","Eb":"D#","Gb":"F#","Ab":"G#","Bb":"A#"};
+  return flatMap[base] || (NOTES.includes(base) ? base : "");
+}
+
+function importChordProFiles(files) {
+  let imported = 0, skipped = 0;
+  let pending = files.length;
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const { title, key } = parseChordPro(e.target.result);
+      if (title) {
+        const exists = songs.some(s => s.title.toLowerCase() === title.toLowerCase());
+        if (!exists) {
+          songs.push({ id: Date.now() + Math.random(), title, key, performanceKey: "", scale: "Major", steveGuitar: false, notes: "" });
+          imported++;
+        } else { skipped++; }
+      } else { skipped++; }
+      if (--pending === 0) {
+        renderSongs();
+        showToast(`Imported ${imported} song${imported!==1?"s":""}${skipped?`, ${skipped} skipped (duplicate or no title)`:""}`)
+      }
+    };
+    reader.readAsText(file);
+  });
+}
+
+// ── Bulk Paste Import ─────────────────────────────────────────────────────────
+function openBulkModal() {
+  document.getElementById("bulk-text").value = "";
+  document.getElementById("bulk-preview").innerHTML = "";
+  document.getElementById("bulk-modal").style.display = "flex";
+  setTimeout(() => document.getElementById("bulk-text").focus(), 100);
+}
+function closeBulkModal() { document.getElementById("bulk-modal").style.display = "none"; }
+
+function parseBulkLine(line) {
+  line = line.trim();
+  if (!line) return null;
+  // "Title - Key" or "Title – Key"
+  let m = line.match(/^(.+?)\s*[-–]\s*([A-Ga-g][b#]?m?)$/);
+  if (m) return { title: m[1].trim(), key: normalizeChordProKey(m[2].replace(/m$/,"")) || "C" };
+  // "Title (Key)"
+  m = line.match(/^(.+?)\s*\(([A-Ga-g][b#]?m?)\)$/);
+  if (m) return { title: m[1].trim(), key: normalizeChordProKey(m[2].replace(/m$/,"")) || "C" };
+  // Plain title
+  return { title: line, key: "C" };
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("bulk-text").addEventListener("input", function() {
+    const lines = this.value.split("\n").map(parseBulkLine).filter(Boolean);
+    const prev = document.getElementById("bulk-preview");
+    if (!lines.length) { prev.innerHTML = ""; return; }
+    prev.innerHTML = `<div style="font-size:12px;color:#888;margin-bottom:6px">${lines.length} song${lines.length!==1?"s":""} detected:</div>`
+      + lines.map(l=>`<div style="font-size:13px;color:#ccc;padding:3px 0;border-bottom:1px solid #2a2a2a">
+          <span style="color:#d4aa4e;font-weight:700;margin-right:8px">${l.key}</span>${l.title}
+        </div>`).join("");
+  });
+});
+
+function importBulk() {
+  const lines = document.getElementById("bulk-text").value.split("\n").map(parseBulkLine).filter(Boolean);
+  let imported = 0, skipped = 0;
+  lines.forEach(l => {
+    const exists = songs.some(s => s.title.toLowerCase() === l.title.toLowerCase());
+    if (!exists) { songs.push({ id: Date.now()+Math.random(), title:l.title, key:l.key, performanceKey:"", scale:"Major", steveGuitar:false, notes:"" }); imported++; }
+    else skipped++;
+  });
+  closeBulkModal();
+  renderSongs();
+  showToast(`Imported ${imported} song${imported!==1?"s":""}${skipped?`, ${skipped} skipped (duplicate)`:""}`)
+}
+
+// ── Drag & drop ───────────────────────────────────────────────────────────────
+function initDropZone() {
+  const zone = document.getElementById("import-drop-zone");
+  zone.addEventListener("dragover", e => { e.preventDefault(); zone.classList.add("drag-over"); });
+  zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+  zone.addEventListener("drop", e => {
+    e.preventDefault(); zone.classList.remove("drag-over");
+    importChordProFiles(e.dataTransfer.files);
+  });
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id="toast"; document.body.appendChild(t); }
+  t.textContent = msg; t.className = "toast toast-show";
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className = "toast", 2800);
+}
+
+// ── Boot ─────────────────────────────────────────────────────────────────────
+initSelects();
+renderSongs();
+renderScalePreview();
+initDropZone();
+</script>
+</body>
+</html>
