@@ -8,31 +8,18 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0f0f;
-    --bg2: #1a1a1a;
-    --bg3: #242424;
-    --bg4: #2e2e2e;
-    --border: #333;
-    --border2: #444;
-    --text: #e8e8e6;
-    --text2: #999;
-    --text3: #666;
-    --accent: #c8f060;
-    --accent2: #a8d040;
-    --accent-dim: rgba(200,240,96,0.12);
-    --accent-dim2: rgba(200,240,96,0.06);
-    --danger: #f06060;
-    --info: #60b8f0;
-    --warn: #f0b860;
-    --radius: 8px;
-    --radius-lg: 12px;
-    --font: 'DM Sans', sans-serif;
-    --mono: 'DM Mono', monospace;
+    --bg: #0f0f0f; --bg2: #1a1a1a; --bg3: #242424; --bg4: #2e2e2e;
+    --border: #333; --border2: #444;
+    --text: #e8e8e6; --text2: #999; --text3: #666;
+    --accent: #c8f060; --accent2: #a8d040;
+    --accent-dim: rgba(200,240,96,0.12); --accent-dim2: rgba(200,240,96,0.06);
+    --danger: #f06060; --info: #60b8f0; --warn: #f0b860;
+    --radius: 8px; --radius-lg: 12px;
+    --font: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; }
 
-  /* Layout */
   #app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
   #nav { display: flex; align-items: center; border-bottom: 1px solid var(--border); background: var(--bg); padding: 0 16px; flex-shrink: 0; }
   #nav .logo { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--accent); letter-spacing: 0.05em; padding: 14px 0; margin-right: 24px; white-space: nowrap; }
@@ -46,17 +33,13 @@
   .view { display: none; padding: 20px 16px; max-width: 900px; margin: 0 auto; }
   .view.active { display: block; }
 
-  /* Headings */
   .page-title { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
   .page-sub { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
 
-  /* Cards */
   .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 12px; }
-  .card-tight { padding: 12px 16px; }
 
-  /* Buttons */
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--bg3); color: var(--text); font-family: var(--font); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-  .btn:hover { background: var(--bg4); border-color: var(--border2); }
+  .btn:hover { background: var(--bg4); }
   .btn:active { transform: scale(0.98); }
   .btn-accent { background: var(--accent); color: #111; border-color: var(--accent); }
   .btn-accent:hover { background: var(--accent2); border-color: var(--accent2); }
@@ -65,51 +48,39 @@
   .btn-sm { padding: 5px 10px; font-size: 12px; }
   .btn-icon { padding: 6px 8px; font-size: 16px; line-height: 1; }
 
-  /* Forms */
+  .guitar-toggle { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 20px; border: 1px solid var(--border2); background: var(--bg4); color: var(--text3); font-family: var(--font); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; user-select: none; white-space: nowrap; }
+  .guitar-toggle:hover { border-color: var(--accent); color: var(--text2); }
+  .guitar-toggle.on { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
   .form-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
   .form-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 120px; }
   .form-group.grow { flex: 2; }
   label { font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.04em; }
-  input[type=text], input[type=search], select, textarea {
+  input[type=text], input[type=search], input[type=number], select, textarea {
     background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
     color: var(--text); font-family: var(--font); font-size: 14px;
     padding: 8px 10px; width: 100%; transition: border-color 0.15s;
   }
-  input[type=text]:focus, input[type=search]:focus, select:focus, textarea:focus {
-    outline: none; border-color: var(--accent);
-  }
+  input[type=text]:focus, input[type=search]:focus, input[type=number]:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
   select option { background: var(--bg3); }
   textarea { min-height: 60px; resize: vertical; }
-  .checkbox-row { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-  .checkbox-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
-  .checkbox-row span { font-size: 14px; }
 
-  /* Song rows */
-  .song-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 6px; cursor: default; transition: border-color 0.15s; }
+  .song-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 6px; transition: border-color 0.15s; }
   .song-row:hover { border-color: var(--border2); }
   .song-title { flex: 1; font-weight: 500; font-size: 14px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .song-key { font-family: var(--mono); font-size: 12px; background: var(--bg4); color: var(--accent); padding: 2px 8px; border-radius: 4px; min-width: 38px; text-align: center; flex-shrink: 0; }
-  .song-badges { display: flex; gap: 4px; flex-shrink: 0; }
-  .badge { font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
-  .badge-guitar { background: var(--accent-dim2); color: var(--accent); border: 1px solid var(--accent-dim); }
-  .badge-vocal { background: rgba(96,184,240,0.1); color: var(--info); border: 1px solid rgba(96,184,240,0.2); }
-  .song-actions { display: flex; gap: 4px; flex-shrink: 0; }
-
-  /* Key group headers */
+  .song-actions { display: flex; gap: 4px; flex-shrink: 0; align-items: center; }
   .key-group-header { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; padding: 14px 0 6px; }
 
-  /* Search bar */
   .search-bar { position: relative; margin-bottom: 14px; }
   .search-bar input { padding-left: 32px; }
   .search-bar::before { content: '🔍'; font-size: 13px; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
 
-  /* Tabs inside view */
-  .inner-tabs { display: flex; gap: 2px; margin-bottom: 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; }
-  .inner-tab { flex: 1; padding: 7px 10px; text-align: center; font-size: 13px; font-weight: 500; color: var(--text2); cursor: pointer; border-radius: 6px; transition: all 0.15s; user-select: none; }
-  .inner-tab:hover { color: var(--text); }
-  .inner-tab.active { background: var(--bg4); color: var(--text); }
+  .set-config { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; }
+  .set-config-group { display: flex; align-items: center; gap: 8px; }
+  .set-config-group label { font-size: 12px; color: var(--text2); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; margin: 0; }
+  .set-config-group input[type=number] { width: 58px; padding: 6px 8px; font-size: 14px; }
 
-  /* Setlist */
   .setlist-set { border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 16px; overflow: hidden; }
   .setlist-set-header { background: var(--bg3); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
   .setlist-set-title { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--accent); }
@@ -120,9 +91,10 @@
   .setlist-num { font-family: var(--mono); font-size: 11px; color: var(--text3); min-width: 20px; }
   .setlist-title { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .setlist-key { font-family: var(--mono); font-size: 11px; color: var(--accent); min-width: 32px; }
-  .guitar-run { border-left: 2px solid var(--accent-dim); margin: 4px 0; }
+  .guitar-run { border-left: 2px solid var(--accent-dim); margin: 4px 0; border-radius: 0 4px 4px 0; }
+  .badge { font-size: 11px; padding: 2px 7px; border-radius: 4px; font-weight: 500; white-space: nowrap; }
+  .badge-guitar { background: var(--accent-dim2); color: var(--accent); border: 1px solid var(--accent-dim); }
 
-  /* Harmony */
   .harmony-display { display: grid; gap: 10px; }
   .harmony-row { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; }
   .harmony-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 8px; }
@@ -132,45 +104,41 @@
   .note-pill.strong { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
   .note-pill.above { background: rgba(96,184,240,0.08); border-color: rgba(96,184,240,0.3); color: var(--info); }
   .note-pill.below { background: rgba(240,184,96,0.08); border-color: rgba(240,184,96,0.3); color: var(--warn); }
-  .vocal-assignment { display: flex; gap: 8px; margin-top: 10px; font-size: 13px; }
+  .vocal-assignment { display: flex; gap: 8px; margin-top: 10px; }
   .vocal-part { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
   .vocal-name { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
   .vocal-note { font-family: var(--mono); font-size: 22px; font-weight: 500; }
 
-  /* Import */
-  .dropzone { border: 2px dashed var(--border2); border-radius: var(--radius-lg); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.15s; }
+  .dropzone { border: 2px dashed var(--border2); border-radius: var(--radius-lg); padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.15s; }
   .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: var(--accent-dim2); }
   .dropzone p { color: var(--text2); font-size: 14px; margin-top: 8px; }
-  .import-preview { max-height: 200px; overflow-y: auto; margin-top: 12px; }
-  .import-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 8px; border-radius: 4px; }
-  .import-row:hover { background: var(--bg3); }
-  .import-check { color: var(--accent); font-size: 12px; min-width: 14px; }
-  .import-skip { color: var(--text3); font-size: 12px; min-width: 14px; }
 
-  /* Stats row */
+  .import-song-list { margin-top: 12px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; max-height: 50vh; overflow-y: auto; }
+  .import-song-row { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+  .import-song-row:last-child { border-bottom: none; }
+  .import-song-row:hover { background: var(--bg3); }
+  .import-song-title { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .import-song-key { font-family: var(--mono); font-size: 12px; color: var(--accent); min-width: 50px; }
+  .import-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 12px; background: var(--bg3); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .import-header-label { font-size: 12px; font-weight: 500; color: var(--text2); }
+
   .stats-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
   .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; flex: 1; min-width: 80px; }
   .stat-val { font-family: var(--mono); font-size: 22px; font-weight: 500; color: var(--accent); }
   .stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.04em; }
 
-  /* Toasts */
   #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(60px); background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius); padding: 10px 18px; font-size: 13px; font-weight: 500; z-index: 1000; transition: transform 0.25s ease; pointer-events: none; white-space: nowrap; }
   #toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* Modal */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 16px; }
   .modal { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 20px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
   .modal-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
   .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
 
-  /* Divider */
   hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
-  /* Responsive */
   @media (max-width: 500px) {
     .form-row { flex-direction: column; }
-    .form-group { min-width: unset; }
-    .song-badges { display: none; }
     .nav-tab { padding: 12px 10px; font-size: 12px; }
   }
 </style>
@@ -188,43 +156,34 @@
   </div>
   <div id="main">
 
-    <!-- SONGS VIEW -->
+    <!-- SONGS -->
     <div class="view active" id="view-songs">
       <div class="page-title">Song Catalog</div>
-      <div class="page-sub" id="catalog-sub">Loading...</div>
-
+      <div class="page-sub" id="catalog-sub"> </div>
       <div class="stats-row" id="stats-row"></div>
-
-      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">
         <button class="btn btn-accent" onclick="openAddSong()">+ Add Song</button>
-        <select id="filter-key" onchange="renderSongs()" style="width:auto;flex:none;">
-          <option value="">All Keys</option>
-        </select>
-        <label class="checkbox-row" style="margin-left:auto;">
-          <input type="checkbox" id="filter-guitar" onchange="renderSongs()">
+        <select id="filter-key" onchange="renderSongs()" style="width:auto;flex:none;"></select>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-left:auto;">
+          <input type="checkbox" id="filter-guitar" onchange="renderSongs()" style="width:16px;height:16px;accent-color:var(--accent);cursor:pointer;">
           <span style="font-size:13px;color:var(--text2)">Guitar only</span>
         </label>
       </div>
-
       <div class="search-bar">
         <input type="search" id="search-songs" placeholder="Search songs…" oninput="renderSongs()">
       </div>
-
       <div id="songs-list"></div>
     </div>
 
-    <!-- HARMONY VIEW -->
+    <!-- HARMONY -->
     <div class="view" id="view-harmony">
       <div class="page-title">Harmony Assistant</div>
       <div class="page-sub">Pick a key and melody note — get harmony suggestions instantly.</div>
-
       <div class="card">
         <div class="form-row">
           <div class="form-group">
             <label>Song Key</label>
-            <select id="harm-key" onchange="updateHarmony()">
-              <option value="">— Select key —</option>
-            </select>
+            <select id="harm-key" onchange="updateHarmony()"><option value="">— Select key —</option></select>
           </div>
           <div class="form-group">
             <label>Scale/Mode</label>
@@ -239,56 +198,56 @@
         </div>
         <div class="form-group" style="margin-bottom:0;">
           <label>Melody Note</label>
-          <div class="note-pills" id="melody-picker" style="margin-top:2px;"></div>
+          <div class="note-pills" id="melody-picker" style="margin-top:4px;"></div>
         </div>
       </div>
-
       <div id="harmony-results"></div>
     </div>
 
-    <!-- SETLIST VIEW -->
+    <!-- SET LISTS -->
     <div class="view" id="view-setlist">
       <div class="page-title">Set Lists</div>
-      <div class="page-sub">3 sets · grouped by key · guitar runs of 3+</div>
-
-      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-        <button class="btn btn-accent" onclick="generateSetlists()">⟳ Generate Set Lists</button>
+      <div class="page-sub">Grouped by key · guitar runs of 3+</div>
+      <div class="set-config">
+        <div class="set-config-group">
+          <label>Sets</label>
+          <input type="number" id="cfg-sets" value="3" min="1" max="6" style="width:58px;">
+        </div>
+        <div class="set-config-group">
+          <label>Songs per set</label>
+          <input type="number" id="cfg-per-set" value="12" min="4" max="30" style="width:58px;">
+        </div>
+        <div style="flex:1;"></div>
+        <button class="btn btn-accent" onclick="generateSetlists()">⟳ Generate</button>
         <button class="btn" onclick="exportSetlists()">Export TXT</button>
       </div>
-
       <div id="setlist-output">
-        <div style="color:var(--text2);font-size:14px;padding:32px 0;text-align:center;">
-          Add songs to your catalog then hit Generate.
-        </div>
+        <div style="color:var(--text2);font-size:14px;padding:32px 0;text-align:center;">Configure above and hit Generate.</div>
       </div>
     </div>
 
-    <!-- IMPORT VIEW -->
+    <!-- IMPORT -->
     <div class="view" id="view-import">
       <div class="page-title">Import from SongSheet Pro</div>
-      <div class="page-sub">Paste ChordPro v5.0 text or drop a .cho / .chopro file.</div>
-
+      <div class="page-sub">Drop a .cho / .chopro file or paste ChordPro text. Then mark which songs you play guitar on before importing.</div>
       <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
         <div style="font-size:32px;">🎵</div>
         <p>Drop .cho / .chopro file here, or click to browse</p>
-        <p style="font-size:12px;margin-top:4px;">Or paste below</p>
+        <p style="font-size:12px;margin-top:4px;">Or paste ChordPro text below</p>
         <input type="file" id="file-input" accept=".cho,.chopro,.chordpro,.txt" style="display:none" onchange="handleFileImport(event)">
       </div>
-
-      <textarea id="import-text" style="margin-top:12px;min-height:120px;font-family:var(--mono);font-size:12px;" placeholder="{title: My Song}&#10;{key: G}&#10;…paste ChordPro here…" oninput="previewImport()"></textarea>
-
+      <textarea id="import-text" style="margin-top:12px;min-height:90px;font-family:var(--mono);font-size:12px;" placeholder="{title: My Song}&#10;{key: G}&#10;…paste ChordPro here…" oninput="previewImport()"></textarea>
       <div id="import-preview-area"></div>
-
-      <div style="display:flex;gap:8px;margin-top:12px;" id="import-actions" style="display:none;">
+      <div style="display:flex;gap:8px;margin-top:12px;">
         <button class="btn btn-accent" id="import-btn" onclick="doImport()" style="display:none;">Import Selected</button>
-        <button class="btn btn-danger btn-sm" onclick="clearImport()">Clear</button>
+        <button class="btn btn-sm" id="clear-import-btn" onclick="clearImport()" style="display:none;">Clear</button>
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- ADD/EDIT MODAL -->
+<!-- MODAL -->
 <div class="modal-overlay" id="song-modal" style="display:none;" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-title" id="modal-title">Add Song</div>
@@ -304,20 +263,20 @@
         <select id="m-key"></select>
       </div>
       <div class="form-group">
-        <label>Harmony vocalist</label>
+        <label>Harmony</label>
         <select id="m-vocal">
-          <option value="above">Other vocalist (above)</option>
-          <option value="below">Steve (above)</option>
+          <option value="above">Other vocalist above</option>
+          <option value="below">Steve above</option>
         </select>
       </div>
     </div>
-    <div class="form-row">
-      <label class="checkbox-row">
-        <input type="checkbox" id="m-guitar">
-        <span>Steve plays guitar on this song</span>
-      </label>
+    <div style="margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Guitar</div>
+      <button class="guitar-toggle" id="m-guitar-toggle" onclick="toggleModalGuitar()">
+        🎸 <span id="m-guitar-label">No guitar</span>
+      </button>
     </div>
-    <div class="form-group" style="margin-top:8px;">
+    <div class="form-group">
       <label>Notes</label>
       <textarea id="m-notes" placeholder="Tempo, feel, cues…"></textarea>
     </div>
@@ -331,615 +290,433 @@
 <div id="toast"></div>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
+const KEYS=['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'];
+const KEY_ORDER={'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11};
+const CHROMATIC=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const INTERVALS={major:[0,2,4,5,7,9,11],minor:[0,2,3,5,7,8,10],dorian:[0,2,3,5,7,9,10],mixolydian:[0,2,4,5,7,9,10],blues:[0,3,5,6,7,10]};
+const NOTE_NAMES={'C#':'Db','D#':'Eb','F#':'Gb','G#':'Ab','A#':'Bb'};
 
-const KEYS = ['C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B'];
-const KEY_ORDER = {'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11};
+let songs=[], editingId=null, modalGuitar=false, pendingImport=[], currentSetlists=null, selectedMelodyNote=null;
 
-const CHROMATIC = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-const INTERVALS = {
-  major:      [0,2,4,5,7,9,11],
-  minor:      [0,2,3,5,7,8,10],
-  dorian:     [0,2,3,5,7,9,10],
-  mixolydian: [0,2,4,5,7,9,10],
-  blues:      [0,3,5,6,7,10]
-};
-const NOTE_NAMES = {'C#':'Db','D#':'Eb','F#':'Gb','G#':'Ab','A#':'Bb'};
+function save(){localStorage.setItem('ccc_songs',JSON.stringify(songs));}
+function load(){try{songs=JSON.parse(localStorage.getItem('ccc_songs')||'[]');}catch(e){songs=[];}}
 
-let songs = [];
-let editingId = null;
-let pendingImport = [];
-let currentSetlists = null;
-let selectedMelodyNote = null;
-
-// ─── STORAGE ─────────────────────────────────────────────────────────────────
-
-function save() { localStorage.setItem('ccc_songs', JSON.stringify(songs)); }
-function load() {
-  try { songs = JSON.parse(localStorage.getItem('ccc_songs') || '[]'); } catch(e) { songs = []; }
-}
-
-// ─── NAV ─────────────────────────────────────────────────────────────────────
-
-document.querySelectorAll('.nav-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+// NAV
+document.querySelectorAll('.nav-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     tab.classList.add('active');
-    document.getElementById('view-' + tab.dataset.view).classList.add('active');
-    if(tab.dataset.view === 'songs') renderSongs();
-    if(tab.dataset.view === 'harmony') initHarmony();
-    if(tab.dataset.view === 'setlist' && currentSetlists) renderSetlists(currentSetlists);
+    document.getElementById('view-'+tab.dataset.view).classList.add('active');
+    if(tab.dataset.view==='songs') renderSongs();
+    if(tab.dataset.view==='harmony') initHarmony();
+    if(tab.dataset.view==='setlist'&&currentSetlists) renderSetlists(currentSetlists);
   });
 });
 
-// ─── SONGS VIEW ──────────────────────────────────────────────────────────────
+// SONGS
+function normalizeKey(k){if(!k)return '';return k.trim().replace(/\s+/g,'').replace(/([A-Ga-g])([#b]?)m?/,(_,n,a)=>n.toUpperCase()+a);}
+function keyIndex(k){k=normalizeKey(k);return KEY_ORDER[k]!==undefined?KEY_ORDER[k]:99;}
 
-function normalizeKey(k) {
-  if (!k) return '';
-  return k.trim().replace(/\s+/g, '').replace(/([A-Ga-g])([#b]?)m?/, (_, note, acc) => {
-    return note.toUpperCase() + acc;
-  });
-}
-
-function keyIndex(k) {
-  k = normalizeKey(k);
-  if (KEY_ORDER[k] !== undefined) return KEY_ORDER[k];
-  if (KEY_ORDER[k.replace('b','#')] !== undefined) return KEY_ORDER[k.replace('b','#')];
-  return 99;
-}
-
-function renderSongs() {
-  const searchVal = (document.getElementById('search-songs').value || '').toLowerCase();
-  const keyFilter = document.getElementById('filter-key').value;
-  const guitarOnly = document.getElementById('filter-guitar').checked;
-
-  let filtered = songs.filter(s => {
-    if (searchVal && !s.title.toLowerCase().includes(searchVal)) return false;
-    if (keyFilter && normalizeKey(s.key) !== normalizeKey(keyFilter)) return false;
-    if (guitarOnly && !s.guitar) return false;
+function renderSongs(){
+  const q=(document.getElementById('search-songs').value||'').toLowerCase();
+  const kf=document.getElementById('filter-key').value;
+  const go=document.getElementById('filter-guitar').checked;
+  let filtered=songs.filter(s=>{
+    if(q&&!s.title.toLowerCase().includes(q))return false;
+    if(kf&&normalizeKey(s.key)!==normalizeKey(kf))return false;
+    if(go&&!s.guitar)return false;
     return true;
   });
-
-  // Group by key
-  const groups = {};
-  filtered.forEach(s => {
-    const k = s.key || 'Unknown';
-    if (!groups[k]) groups[k] = [];
-    groups[k].push(s);
-  });
-
-  const sortedKeys = Object.keys(groups).sort((a,b) => keyIndex(a) - keyIndex(b));
-
-  const list = document.getElementById('songs-list');
-  if (filtered.length === 0) {
-    list.innerHTML = '<div style="color:var(--text2);text-align:center;padding:32px 0;font-size:14px;">No songs yet. Add one above or import from SongSheet Pro.</div>';
-    return;
+  const groups={};
+  filtered.forEach(s=>{const k=s.key||'Unknown';if(!groups[k])groups[k]=[];groups[k].push(s);});
+  const sortedKeys=Object.keys(groups).sort((a,b)=>keyIndex(a)-keyIndex(b));
+  const list=document.getElementById('songs-list');
+  if(!filtered.length){
+    list.innerHTML='<div style="color:var(--text2);text-align:center;padding:32px 0;font-size:14px;">No songs yet. Add one or import from SongSheet Pro.</div>';
+    updateStats(); populateKeyFilter(); return;
   }
-
-  let html = '';
-  sortedKeys.forEach(key => {
-    html += `<div class="key-group-header">${key}</div>`;
-    groups[key].forEach(song => {
-      html += `<div class="song-row">
+  let html='';
+  sortedKeys.forEach(key=>{
+    html+=`<div class="key-group-header">${key}</div>`;
+    groups[key].forEach(song=>{
+      html+=`<div class="song-row">
         <div class="song-title">${esc(song.title)}</div>
         <div class="song-key">${esc(song.key)}</div>
-        <div class="song-badges">
-          ${song.guitar ? '<span class="badge badge-guitar">Guitar</span>' : ''}
-          ${song.vocal === 'below' ? '<span class="badge badge-vocal">Steve↑</span>' : ''}
-        </div>
+        <button class="guitar-toggle ${song.guitar?'on':''}" onclick="toggleSongGuitar('${song.id}')">
+          🎸 ${song.guitar?'Guitar':'No guitar'}
+        </button>
         <div class="song-actions">
-          <button class="btn btn-sm btn-icon" title="Edit" onclick="openEditSong('${song.id}')">✎</button>
-          <button class="btn btn-sm btn-icon btn-danger" title="Delete" onclick="deleteSong('${song.id}')">✕</button>
+          <button class="btn btn-sm btn-icon" onclick="openEditSong('${song.id}')">✎</button>
+          <button class="btn btn-sm btn-icon btn-danger" onclick="deleteSong('${song.id}')">✕</button>
         </div>
       </div>`;
     });
   });
-  list.innerHTML = html;
-
-  updateStats();
-  populateKeyFilter();
+  list.innerHTML=html;
+  updateStats(); populateKeyFilter();
 }
 
-function updateStats() {
-  const total = songs.length;
-  const guitar = songs.filter(s => s.guitar).length;
-  const keys = new Set(songs.map(s => normalizeKey(s.key)).filter(Boolean)).size;
-  document.getElementById('catalog-sub').textContent = `${total} songs in catalog`;
-  document.getElementById('stats-row').innerHTML = `
-    <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-lbl">Songs</div></div>
-    <div class="stat-card"><div class="stat-val">${guitar}</div><div class="stat-lbl">Guitar</div></div>
-    <div class="stat-card"><div class="stat-val">${keys}</div><div class="stat-lbl">Keys</div></div>
-  `;
+function toggleSongGuitar(id){
+  const s=songs.find(s=>s.id===id); if(!s)return;
+  s.guitar=!s.guitar; save(); renderSongs();
 }
 
-function populateKeyFilter() {
-  const sel = document.getElementById('filter-key');
-  const cur = sel.value;
-  const usedKeys = [...new Set(songs.map(s => s.key).filter(Boolean))].sort((a,b) => keyIndex(a) - keyIndex(b));
-  sel.innerHTML = '<option value="">All Keys</option>' + usedKeys.map(k => `<option value="${k}"${k===cur?' selected':''}>${k}</option>`).join('');
+function updateStats(){
+  const t=songs.length,g=songs.filter(s=>s.guitar).length,k=new Set(songs.map(s=>normalizeKey(s.key)).filter(Boolean)).size;
+  document.getElementById('catalog-sub').textContent=`${t} songs in catalog`;
+  document.getElementById('stats-row').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${t}</div><div class="stat-lbl">Songs</div></div>
+    <div class="stat-card"><div class="stat-val">${g}</div><div class="stat-lbl">Guitar</div></div>
+    <div class="stat-card"><div class="stat-val">${k}</div><div class="stat-lbl">Keys</div></div>`;
 }
 
-// ─── ADD / EDIT MODAL ────────────────────────────────────────────────────────
-
-function populateKeySelect(selId) {
-  const sel = document.getElementById(selId);
-  sel.innerHTML = KEYS.map(k => `<option value="${k}">${k}</option>`).join('');
+function populateKeyFilter(){
+  const sel=document.getElementById('filter-key'),cur=sel.value;
+  const used=[...new Set(songs.map(s=>s.key).filter(Boolean))].sort((a,b)=>keyIndex(a)-keyIndex(b));
+  sel.innerHTML='<option value="">All Keys</option>'+used.map(k=>`<option value="${k}"${k===cur?' selected':''}>${k}</option>`).join('');
 }
 
-function openAddSong() {
-  editingId = null;
-  document.getElementById('modal-title').textContent = 'Add Song';
-  document.getElementById('m-title').value = '';
-  populateKeySelect('m-key');
-  document.getElementById('m-key').value = 'G';
-  document.getElementById('m-guitar').checked = false;
-  document.getElementById('m-vocal').value = 'above';
-  document.getElementById('m-notes').value = '';
-  document.getElementById('song-modal').style.display = 'flex';
-  setTimeout(() => document.getElementById('m-title').focus(), 50);
+// MODAL
+function populateKeySelect(id){document.getElementById(id).innerHTML=KEYS.map(k=>`<option value="${k}">${k}</option>`).join('');}
+
+function toggleModalGuitar(){
+  modalGuitar=!modalGuitar;
+  document.getElementById('m-guitar-toggle').classList.toggle('on',modalGuitar);
+  document.getElementById('m-guitar-label').textContent=modalGuitar?'Steve plays guitar':'No guitar';
 }
 
-function openEditSong(id) {
-  const song = songs.find(s => s.id === id);
-  if (!song) return;
-  editingId = id;
-  document.getElementById('modal-title').textContent = 'Edit Song';
-  document.getElementById('m-title').value = song.title;
-  populateKeySelect('m-key');
-  document.getElementById('m-key').value = song.key || 'G';
-  document.getElementById('m-guitar').checked = !!song.guitar;
-  document.getElementById('m-vocal').value = song.vocal || 'above';
-  document.getElementById('m-notes').value = song.notes || '';
-  document.getElementById('song-modal').style.display = 'flex';
+function openAddSong(){
+  editingId=null; modalGuitar=false;
+  document.getElementById('modal-title').textContent='Add Song';
+  document.getElementById('m-title').value='';
+  populateKeySelect('m-key'); document.getElementById('m-key').value='G';
+  document.getElementById('m-guitar-toggle').classList.remove('on');
+  document.getElementById('m-guitar-label').textContent='No guitar';
+  document.getElementById('m-vocal').value='above';
+  document.getElementById('m-notes').value='';
+  document.getElementById('song-modal').style.display='flex';
+  setTimeout(()=>document.getElementById('m-title').focus(),50);
 }
 
-function closeModal() {
-  document.getElementById('song-modal').style.display = 'none';
+function openEditSong(id){
+  const song=songs.find(s=>s.id===id); if(!song)return;
+  editingId=id; modalGuitar=!!song.guitar;
+  document.getElementById('modal-title').textContent='Edit Song';
+  document.getElementById('m-title').value=song.title;
+  populateKeySelect('m-key'); document.getElementById('m-key').value=song.key||'G';
+  document.getElementById('m-guitar-toggle').classList.toggle('on',modalGuitar);
+  document.getElementById('m-guitar-label').textContent=modalGuitar?'Steve plays guitar':'No guitar';
+  document.getElementById('m-vocal').value=song.vocal||'above';
+  document.getElementById('m-notes').value=song.notes||'';
+  document.getElementById('song-modal').style.display='flex';
 }
 
-function saveSong() {
-  const title = document.getElementById('m-title').value.trim();
-  if (!title) { toast('Please enter a title'); return; }
-  const song = {
-    id: editingId || uid(),
-    title,
-    key: document.getElementById('m-key').value,
-    guitar: document.getElementById('m-guitar').checked,
-    vocal: document.getElementById('m-vocal').value,
-    notes: document.getElementById('m-notes').value.trim()
-  };
-  if (editingId) {
-    const idx = songs.findIndex(s => s.id === editingId);
-    songs[idx] = song;
-  } else {
-    songs.push(song);
-  }
-  save();
-  closeModal();
-  renderSongs();
-  toast(editingId ? 'Song updated' : 'Song added');
+function closeModal(){document.getElementById('song-modal').style.display='none';}
+
+function saveSong(){
+  const title=document.getElementById('m-title').value.trim();
+  if(!title){toast('Please enter a title');return;}
+  const song={id:editingId||uid(),title,key:document.getElementById('m-key').value,guitar:modalGuitar,vocal:document.getElementById('m-vocal').value,notes:document.getElementById('m-notes').value.trim()};
+  if(editingId){songs[songs.findIndex(s=>s.id===editingId)]=song;}else{songs.push(song);}
+  save(); closeModal(); renderSongs();
+  toast(editingId?'Song updated':'Song added');
 }
 
-function deleteSong(id) {
-  if (!confirm('Delete this song?')) return;
-  songs = songs.filter(s => s.id !== id);
-  save();
-  renderSongs();
-  toast('Song deleted');
+function deleteSong(id){
+  if(!confirm('Delete this song?'))return;
+  songs=songs.filter(s=>s.id!==id); save(); renderSongs(); toast('Song deleted');
 }
 
-// ─── HARMONY VIEW ────────────────────────────────────────────────────────────
-
-function initHarmony() {
-  const sel = document.getElementById('harm-key');
-  sel.innerHTML = '<option value="">— Select key —</option>' + KEYS.map(k => `<option value="${k}">${k}</option>`).join('');
-  buildMelodyPicker();
-}
-
-function buildMelodyPicker() {
-  const picker = document.getElementById('melody-picker');
-  picker.innerHTML = CHROMATIC.map(n => {
-    const display = NOTE_NAMES[n] ? `${n}/${NOTE_NAMES[n]}` : n;
-    return `<div class="note-pill" data-note="${n}" onclick="selectMelodyNote('${n}')">${display}</div>`;
+// HARMONY
+function initHarmony(){
+  const sel=document.getElementById('harm-key');
+  sel.innerHTML='<option value="">— Select key —</option>'+KEYS.map(k=>`<option value="${k}">${k}</option>`).join('');
+  document.getElementById('melody-picker').innerHTML=CHROMATIC.map(n=>{
+    const d=NOTE_NAMES[n]?`${n}/${NOTE_NAMES[n]}`:n;
+    return `<div class="note-pill" data-note="${n}" onclick="selectMelodyNote('${n}')">${d}</div>`;
   }).join('');
 }
 
-function selectMelodyNote(note) {
-  selectedMelodyNote = note;
-  document.querySelectorAll('#melody-picker .note-pill').forEach(p => {
-    p.classList.toggle('strong', p.dataset.note === note);
-  });
+function selectMelodyNote(note){
+  selectedMelodyNote=note;
+  document.querySelectorAll('#melody-picker .note-pill').forEach(p=>p.classList.toggle('strong',p.dataset.note===note));
   updateHarmony();
 }
 
-function updateHarmony() {
-  const keyRaw = document.getElementById('harm-key').value;
-  const mode = document.getElementById('harm-mode').value;
-  const results = document.getElementById('harmony-results');
-  if (!keyRaw || !selectedMelodyNote) {
-    results.innerHTML = '';
-    return;
-  }
-
-  const rootIdx = CHROMATIC.indexOf(keyRaw.replace('/','').replace('Db','C#').replace('Eb','D#').replace('Gb','F#').replace('Ab','G#').replace('Bb','A#').split('/')[0]);
-  if (rootIdx < 0) { results.innerHTML = ''; return; }
-
-  const pattern = INTERVALS[mode];
-  const scaleNotes = pattern.map(i => CHROMATIC[(rootIdx + i) % 12]);
-  const melodyIdx = CHROMATIC.indexOf(selectedMelodyNote);
-
-  // Find melody note's position in scale
-  const melodyInScale = scaleNotes.includes(selectedMelodyNote);
-
-  // Build harmony options above and below (in scale)
-  function nearestScaleNote(fromIdx, direction) {
-    // direction: 1 = up, -1 = down
-    for (let step = 1; step <= 11; step++) {
-      const candidate = CHROMATIC[(fromIdx + direction * step + 12) % 12];
-      if (scaleNotes.includes(candidate)) return { note: candidate, interval: step };
-    }
-    return null;
-  }
-
-  // Chord tones (1, 3, 5, 7 of scale built on melody note)
-  function chordTonesFrom(noteIdx) {
-    return [0, 2, 4, 6].map(i => {
-      const pos = scaleNotes.indexOf(CHROMATIC[(noteIdx) % 12]);
-      if (pos < 0) return null;
-      return scaleNotes[(pos + i) % scaleNotes.length];
-    }).filter(Boolean);
-  }
-
-  const thirds = {
-    above: [],
-    below: []
-  };
-
-  // 3rd, 5th, 6th above
-  [2,4,5].forEach(steps => {
-    let idx = scaleNotes.indexOf(selectedMelodyNote);
-    if (idx < 0) return;
-    const note = scaleNotes[(idx + steps) % scaleNotes.length];
-    thirds.above.push({ note, label: ['3rd above','5th above','6th above'][steps===2?0:steps===4?1:2] });
+function updateHarmony(){
+  const keyRaw=document.getElementById('harm-key').value;
+  const mode=document.getElementById('harm-mode').value;
+  const results=document.getElementById('harmony-results');
+  if(!keyRaw||!selectedMelodyNote){results.innerHTML='';return;}
+  const rootStr=keyRaw.split('/')[0];
+  const rootIdx=CHROMATIC.indexOf(rootStr);
+  if(rootIdx<0){results.innerHTML='';return;}
+  const pattern=INTERVALS[mode];
+  const scaleNotes=pattern.map(i=>CHROMATIC[(rootIdx+i)%12]);
+  const melodyInScale=scaleNotes.includes(selectedMelodyNote);
+  const thirds={above:[],below:[]};
+  [2,4,5].forEach((steps,si)=>{
+    const idx=scaleNotes.indexOf(selectedMelodyNote); if(idx<0)return;
+    thirds.above.push({note:scaleNotes[(idx+steps)%scaleNotes.length],label:['3rd above','5th above','6th above'][si]});
   });
-
-  // 3rd, 4th, 6th below
-  [2,3,5].forEach(steps => {
-    let idx = scaleNotes.indexOf(selectedMelodyNote);
-    if (idx < 0) idx = 0;
-    let newIdx = (idx - steps + scaleNotes.length) % scaleNotes.length;
-    const note = scaleNotes[newIdx];
-    thirds.below.push({ note, label: ['3rd below','4th below','6th below'][steps===2?0:steps===3?1:2] });
+  [2,3,5].forEach((steps,si)=>{
+    const idx=scaleNotes.indexOf(selectedMelodyNote); if(idx<0)return;
+    thirds.below.push({note:scaleNotes[(idx-steps+scaleNotes.length)%scaleNotes.length],label:['3rd below','4th below','6th below'][si]});
   });
-
-  const noteName = n => NOTE_NAMES[n] ? `${n}/${NOTE_NAMES[n]}` : n;
-
-  // Best suggestion: other vocalist sings above by default
-  const bestAbove = thirds.above[0]; // 3rd above
-  const bestBelow = thirds.below[0]; // 3rd below
-
-  results.innerHTML = `
-    <div class="harmony-display">
-      <div class="harmony-row">
-        <div class="harmony-label">Scale — ${keyRaw} ${mode.charAt(0).toUpperCase()+mode.slice(1)}</div>
-        <div class="note-pills">${scaleNotes.map(n => `<div class="note-pill ${n===selectedMelodyNote?'strong':''}">${noteName(n)}</div>`).join('')}</div>
-      </div>
-
-      ${!melodyInScale ? `<div class="card" style="background:var(--bg3);border-color:#f0b86040;"><span style="color:var(--warn);font-size:13px;">⚠ ${noteName(selectedMelodyNote)} is not in the ${keyRaw} ${mode} scale. Harmony suggestions shown from nearest scale degree.</span></div>` : ''}
-
-      <div class="harmony-row">
-        <div class="harmony-label">Suggested Harmony Parts</div>
-        <div class="vocal-assignment">
-          <div class="vocal-part" style="border-color:rgba(96,184,240,0.25);">
-            <div class="vocal-name" style="color:var(--info)">Other vocalist (above)</div>
-            <div class="vocal-note">${bestAbove ? noteName(bestAbove.note) : '—'}</div>
-            <div style="font-size:11px;color:var(--text2);margin-top:4px;">${bestAbove ? bestAbove.label : ''}</div>
-          </div>
-          <div class="vocal-part" style="border-color:rgba(200,240,96,0.2);background:var(--accent-dim2);">
-            <div class="vocal-name" style="color:var(--accent)">Steve (melody)</div>
-            <div class="vocal-note" style="color:var(--accent)">${noteName(selectedMelodyNote)}</div>
-            <div style="font-size:11px;color:var(--text2);margin-top:4px;">Melody</div>
-          </div>
+  function chordTones(){return[0,2,4,6].map(i=>{const p=scaleNotes.indexOf(selectedMelodyNote);return p<0?null:scaleNotes[(p+i)%scaleNotes.length];}).filter(Boolean);}
+  const nn=n=>NOTE_NAMES[n]?`${n}/${NOTE_NAMES[n]}`:n;
+  const ba=thirds.above[0];
+  results.innerHTML=`<div class="harmony-display">
+    <div class="harmony-row">
+      <div class="harmony-label">Scale — ${keyRaw} ${mode.charAt(0).toUpperCase()+mode.slice(1)}</div>
+      <div class="note-pills">${scaleNotes.map(n=>`<div class="note-pill ${n===selectedMelodyNote?'strong':''}">${nn(n)}</div>`).join('')}</div>
+    </div>
+    ${!melodyInScale?`<div class="card" style="background:var(--bg3);border-color:#f0b86040;"><span style="color:var(--warn);font-size:13px;">⚠ ${nn(selectedMelodyNote)} is not in the ${keyRaw} ${mode} scale.</span></div>`:''}
+    <div class="harmony-row">
+      <div class="harmony-label">Suggested Parts</div>
+      <div class="vocal-assignment">
+        <div class="vocal-part" style="border-color:rgba(96,184,240,0.25);">
+          <div class="vocal-name" style="color:var(--info)">Other vocalist (above)</div>
+          <div class="vocal-note">${ba?nn(ba.note):'—'}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:4px;">${ba?ba.label:''}</div>
+        </div>
+        <div class="vocal-part" style="border-color:rgba(200,240,96,0.2);background:var(--accent-dim2);">
+          <div class="vocal-name" style="color:var(--accent)">Steve (melody)</div>
+          <div class="vocal-note" style="color:var(--accent)">${nn(selectedMelodyNote)}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:4px;">Melody</div>
         </div>
       </div>
-
-      <div class="harmony-row">
-        <div class="harmony-label">All Harmony Options Above</div>
-        <div class="note-pills">${thirds.above.map(h => `<div class="note-pill above" title="${h.label}">${noteName(h.note)}<span style="font-size:10px;color:var(--text3);margin-left:4px;">${h.label.split(' ')[0]}</span></div>`).join('')}</div>
-      </div>
-
-      <div class="harmony-row">
-        <div class="harmony-label">All Harmony Options Below</div>
-        <div class="note-pills">${thirds.below.map(h => `<div class="note-pill below" title="${h.label}">${noteName(h.note)}<span style="font-size:10px;color:var(--text3);margin-left:4px;">${h.label.split(' ')[0]}</span></div>`).join('')}</div>
-      </div>
-
-      <div class="harmony-row">
-        <div class="harmony-label">Chord Tones Available (over melody note as root)</div>
-        <div class="note-pills">${chordTonesFrom(melodyIdx).map(n => `<div class="note-pill strong">${noteName(n)}</div>`).join('')}</div>
-      </div>
     </div>
-  `;
+    <div class="harmony-row">
+      <div class="harmony-label">All Options Above</div>
+      <div class="note-pills">${thirds.above.map(h=>`<div class="note-pill above">${nn(h.note)} <span style="font-size:10px;color:var(--text3);">${h.label.split(' ')[0]}</span></div>`).join('')}</div>
+    </div>
+    <div class="harmony-row">
+      <div class="harmony-label">All Options Below</div>
+      <div class="note-pills">${thirds.below.map(h=>`<div class="note-pill below">${nn(h.note)} <span style="font-size:10px;color:var(--text3);">${h.label.split(' ')[0]}</span></div>`).join('')}</div>
+    </div>
+    <div class="harmony-row">
+      <div class="harmony-label">Chord Tones</div>
+      <div class="note-pills">${chordTones().map(n=>`<div class="note-pill strong">${nn(n)}</div>`).join('')}</div>
+    </div>
+  </div>`;
 }
 
-// ─── SET LIST GENERATOR ──────────────────────────────────────────────────────
-
-function generateSetlists() {
-  if (songs.length < 12) {
-    document.getElementById('setlist-output').innerHTML = '<div style="color:var(--warn);font-size:14px;padding:20px 0;">You need at least 12 songs to generate set lists. Add more songs first.</div>';
+// SET LISTS
+function generateSetlists(){
+  const numSets=Math.max(1,parseInt(document.getElementById('cfg-sets').value)||3);
+  const perSet=Math.max(4,parseInt(document.getElementById('cfg-per-set').value)||12);
+  if(songs.length<perSet){
+    document.getElementById('setlist-output').innerHTML=`<div style="color:var(--warn);font-size:14px;padding:20px 0;">You need at least ${perSet} songs to fill one set. You have ${songs.length}.</div>`;
     return;
   }
-
-  const pool = [...songs];
-  // Shuffle pool
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+  const pool=[...songs];
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  const sets=[];
+  for(let i=0;i<numSets;i++){
+    const chunk=[];
+    for(let j=0;j<perSet;j++) chunk.push(pool[(i*perSet+j)%pool.length]);
+    sets.push(optimizeSet(chunk));
   }
-
-  const total = Math.min(pool.length, 36);
-  const perSet = Math.floor(total / 3);
-  const sets = [
-    pool.slice(0, perSet),
-    pool.slice(perSet, perSet * 2),
-    pool.slice(perSet * 2, perSet * 3)
-  ];
-
-  // For each set: sort by key, then ensure guitar songs grouped in runs of 3+
-  const optimizedSets = sets.map(set => optimizeSet(set));
-  currentSetlists = optimizedSets;
-  renderSetlists(optimizedSets);
+  currentSetlists=sets; renderSetlists(sets);
 }
 
-function optimizeSet(songs) {
-  // Group by key first
-  const byKey = {};
-  songs.forEach(s => {
-    const k = s.key || 'Unknown';
-    if (!byKey[k]) byKey[k] = [];
-    byKey[k].push(s);
-  });
-  const sortedKeys = Object.keys(byKey).sort((a,b) => keyIndex(a) - keyIndex(b));
-  let ordered = [];
-  sortedKeys.forEach(k => ordered.push(...byKey[k]));
-
-  // Now enforce guitar grouping: guitar songs should appear in runs of 3+
-  // Strategy: collect guitar and non-guitar, then interleave so guitar runs ≥ 3
-  const guitar = ordered.filter(s => s.guitar);
-  const nonGuitar = ordered.filter(s => !s.guitar);
-
-  if (guitar.length < 3) return ordered; // not enough to group, return as-is
-
-  // Try to form guitar runs of 3, distributed through the set
-  // Rebuild: chunk guitar into groups of 3, intersperse with non-guitar blocks
-  const guitarChunks = [];
-  for (let i = 0; i < guitar.length; i += 3) guitarChunks.push(guitar.slice(i, i + 3));
-  const ngChunks = [];
-  const ngSize = Math.max(1, Math.floor(nonGuitar.length / guitarChunks.length));
-  for (let i = 0; i < nonGuitar.length; i += ngSize) ngChunks.push(nonGuitar.slice(i, i + ngSize));
-
-  const result = [];
-  const maxChunks = Math.max(guitarChunks.length, ngChunks.length);
-  for (let i = 0; i < maxChunks; i++) {
-    if (ngChunks[i]) result.push(...ngChunks[i]);
-    if (guitarChunks[i]) result.push(...guitarChunks[i]);
-  }
+function optimizeSet(arr){
+  const byKey={};
+  arr.forEach(s=>{const k=s.key||'Unknown';if(!byKey[k])byKey[k]=[];byKey[k].push(s);});
+  let ordered=[];
+  Object.keys(byKey).sort((a,b)=>keyIndex(a)-keyIndex(b)).forEach(k=>ordered.push(...byKey[k]));
+  const guitar=ordered.filter(s=>s.guitar);
+  const nonGuitar=ordered.filter(s=>!s.guitar);
+  if(guitar.length<3)return ordered;
+  const gChunks=[];for(let i=0;i<guitar.length;i+=3)gChunks.push(guitar.slice(i,i+3));
+  const ngSize=Math.max(1,Math.floor(nonGuitar.length/gChunks.length));
+  const ngChunks=[];for(let i=0;i<nonGuitar.length;i+=ngSize)ngChunks.push(nonGuitar.slice(i,i+ngSize));
+  const result=[];
+  const max=Math.max(gChunks.length,ngChunks.length);
+  for(let i=0;i<max;i++){if(ngChunks[i])result.push(...ngChunks[i]);if(gChunks[i])result.push(...gChunks[i]);}
   return result;
 }
 
-function renderSetlists(sets) {
-  const out = document.getElementById('setlist-output');
-  const setNames = ['Set 1', 'Set 2', 'Set 3'];
-  let html = '';
-
-  sets.forEach((set, si) => {
-    const count = set.length;
-    const guitarCount = set.filter(s => s.guitar).length;
-    html += `<div class="setlist-set">
+function renderSetlists(sets){
+  let html='';
+  sets.forEach((set,si)=>{
+    const gc=set.filter(s=>s.guitar).length;
+    html+=`<div class="setlist-set">
       <div class="setlist-set-header">
-        <div class="setlist-set-title">${setNames[si]}</div>
-        <div class="setlist-set-meta">${count} songs · ${guitarCount} with guitar</div>
-      </div>
-      <div class="setlist-body">`;
-
-    let i = 0;
-    while (i < set.length) {
-      const song = set[i];
-      // Check if this starts a guitar run
-      let runEnd = i;
-      if (song.guitar) {
-        while (runEnd < set.length && set[runEnd].guitar) runEnd++;
-        const runLen = runEnd - i;
-        if (runLen >= 3) {
-          html += `<div class="guitar-run">`;
-          for (let j = i; j < runEnd; j++) {
-            html += songSetlistRow(j + 1, set[j]);
-          }
-          html += `</div>`;
-          i = runEnd;
-          continue;
-        }
+        <div class="setlist-set-title">Set ${si+1}</div>
+        <div class="setlist-set-meta">${set.length} songs · ${gc} with guitar</div>
+      </div><div class="setlist-body">`;
+    let i=0;
+    while(i<set.length){
+      if(set[i].guitar){
+        let e=i;while(e<set.length&&set[e].guitar)e++;
+        if(e-i>=3){html+=`<div class="guitar-run">`;for(let j=i;j<e;j++)html+=slRow(j+1,set[j]);html+=`</div>`;i=e;continue;}
       }
-      html += songSetlistRow(i + 1, song);
-      i++;
+      html+=slRow(i+1,set[i]); i++;
     }
-
-    html += `</div></div>`;
+    html+=`</div></div>`;
   });
-
-  out.innerHTML = html;
+  document.getElementById('setlist-output').innerHTML=html;
 }
 
-function songSetlistRow(num, song) {
+function slRow(num,song){
   return `<div class="setlist-song">
     <div class="setlist-num">${num}</div>
     <div class="setlist-title">${esc(song.title)}</div>
     <div class="setlist-key">${esc(song.key)}</div>
-    ${song.guitar ? '<span class="badge badge-guitar" style="font-size:10px;">G</span>' : ''}
-    ${song.notes ? `<span title="${esc(song.notes)}" style="color:var(--text3);font-size:11px;cursor:default;">📝</span>` : ''}
+    ${song.guitar?'<span class="badge badge-guitar" style="font-size:10px;">G</span>':''}
+    ${song.notes?`<span title="${esc(song.notes)}" style="color:var(--text3);font-size:11px;">📝</span>`:''}
   </div>`;
 }
 
-function exportSetlists() {
-  if (!currentSetlists) { toast('Generate set lists first'); return; }
-  const setNames = ['SET 1', 'SET 2', 'SET 3'];
-  let txt = 'COLD CUT COMBO — SET LISTS\n\n';
-  currentSetlists.forEach((set, si) => {
-    txt += `${setNames[si]}\n${'─'.repeat(30)}\n`;
-    set.forEach((song, i) => {
-      const g = song.guitar ? ' [G]' : '';
-      txt += `${String(i+1).padStart(2,'0')}. ${song.title}${g}  (${song.key})\n`;
-    });
-    txt += '\n';
+function exportSetlists(){
+  if(!currentSetlists){toast('Generate set lists first');return;}
+  let txt='COLD CUT COMBO — SET LISTS\n\n';
+  currentSetlists.forEach((set,si)=>{
+    txt+=`SET ${si+1}\n${'─'.repeat(30)}\n`;
+    set.forEach((s,i)=>txt+=`${String(i+1).padStart(2,'0')}. ${s.title}${s.guitar?' [G]':''}  (${s.key})\n`);
+    txt+='\n';
   });
-  const blob = new Blob([txt], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'ColdCutCombo-Setlists.txt';
-  a.click();
-  URL.revokeObjectURL(url);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));
+  a.download='ColdCutCombo-Setlists.txt'; a.click();
 }
 
-// ─── CHORDPRO IMPORT ─────────────────────────────────────────────────────────
-
-function parseChordPro(text) {
-  const parsed = [];
-  // Split on song boundaries — look for {new_song}, {ns}, or repeated {title} blocks
-  const blocks = text.split(/\{new_song\}|\{ns\}/i).filter(b => b.trim());
-
-  (blocks.length > 1 ? blocks : [text]).forEach(block => {
-    const get = (tag) => {
-      const m = block.match(new RegExp(`\\{${tag}:\\s*([^}]+)\\}`, 'i'));
-      return m ? m[1].trim() : '';
-    };
-
-    const title = get('title') || get('t');
-    const key = parseKey(get('key'));
-
-    if (title) {
-      parsed.push({ title, key: key || 'C', guitar: false, vocal: 'above', notes: get('comment') || get('c') || '' });
-    }
+// IMPORT
+function parseChordPro(text){
+  const blocks=text.split(/\{new_song\}|\{ns\}/i).filter(b=>b.trim());
+  const results=[];
+  (blocks.length>1?blocks:[text]).forEach(block=>{
+    const get=tag=>{const m=block.match(new RegExp(`\\{${tag}:\\s*([^}]+)\\}`,'i'));return m?m[1].trim():'';};
+    const title=get('title')||get('t');
+    const key=parseKey(get('key'));
+    if(title) results.push({title,key:key||'C',guitar:false,vocal:'above',notes:get('comment')||''});
   });
-
-  return parsed;
+  return results;
 }
 
-function parseKey(raw) {
-  if (!raw) return '';
-  // Handle "Am" → "A", "Gmaj" → "G", "F#m" → "F#", "Bb" → "A#/Bb"
-  const m = raw.match(/^([A-G][#b]?)/);
-  if (!m) return raw;
-  let k = m[1];
-  // Normalize flats
-  const flatMap = {'Db':'C#/Db','Eb':'D#/Eb','Gb':'F#/Gb','Ab':'G#/Ab','Bb':'A#/Bb'};
-  if (flatMap[k]) k = flatMap[k];
-  return k;
+function parseKey(raw){
+  if(!raw)return '';
+  const m=raw.match(/^([A-G][#b]?)/); if(!m)return raw;
+  const k=m[1];
+  return {'Db':'C#/Db','Eb':'D#/Eb','Gb':'F#/Gb','Ab':'G#/Ab','Bb':'A#/Bb'}[k]||k;
 }
 
-function handleFileImport(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('import-text').value = ev.target.result;
-    previewImport();
-  };
-  reader.readAsText(file);
+function handleFileImport(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{document.getElementById('import-text').value=ev.target.result;previewImport();};
+  r.readAsText(file);
 }
 
-function previewImport() {
-  const text = document.getElementById('import-text').value;
-  if (!text.trim()) { document.getElementById('import-preview-area').innerHTML = ''; document.getElementById('import-btn').style.display = 'none'; return; }
-
-  pendingImport = parseChordPro(text);
-  if (pendingImport.length === 0) {
-    document.getElementById('import-preview-area').innerHTML = '<div style="color:var(--warn);font-size:13px;margin-top:8px;">No songs found. Make sure your ChordPro includes {title:} and {key:} directives.</div>';
-    document.getElementById('import-btn').style.display = 'none';
-    return;
+function previewImport(){
+  const text=document.getElementById('import-text').value;
+  const pa=document.getElementById('import-preview-area');
+  const ib=document.getElementById('import-btn');
+  const cb=document.getElementById('clear-import-btn');
+  if(!text.trim()){pa.innerHTML='';ib.style.display='none';cb.style.display='none';return;}
+  const parsed=parseChordPro(text);
+  // Preserve guitar selections
+  if(pendingImport.length){const prev={};pendingImport.forEach(p=>prev[p.title.toLowerCase()]=p.guitar);parsed.forEach(p=>{if(prev[p.title.toLowerCase()]!==undefined)p.guitar=prev[p.title.toLowerCase()];});}
+  pendingImport=parsed;
+  if(!pendingImport.length){
+    pa.innerHTML='<div style="color:var(--warn);font-size:13px;margin-top:8px;">No songs found. Make sure your ChordPro uses {title:} and {key:} directives.</div>';
+    ib.style.display='none'; cb.style.display='inline-flex'; return;
   }
+  renderImportList();
+  ib.style.display='inline-flex'; cb.style.display='inline-flex';
+}
 
-  const existingTitles = new Set(songs.map(s => s.title.toLowerCase()));
-  let html = `<div style="font-size:13px;color:var(--text2);margin:10px 0 6px;">${pendingImport.length} songs found:</div><div class="import-preview">`;
-  pendingImport.forEach((s, i) => {
-    const dup = existingTitles.has(s.title.toLowerCase());
-    html += `<div class="import-row">
-      <span class="${dup ? 'import-skip' : 'import-check'}">${dup ? '↷' : '✓'}</span>
-      <span style="flex:1;${dup ? 'color:var(--text3)' : ''}">${esc(s.title)}</span>
-      <span style="font-family:var(--mono);font-size:11px;color:var(--accent);">${esc(s.key)}</span>
-      ${dup ? '<span style="font-size:11px;color:var(--text3);margin-left:6px;">already exists</span>' : ''}
+function renderImportList(){
+  const existing=new Set(songs.map(s=>s.title.toLowerCase()));
+  const newCount=pendingImport.filter(s=>!existing.has(s.title.toLowerCase())).length;
+  const gc=pendingImport.filter(s=>s.guitar).length;
+  let html=`<div class="import-song-list">
+    <div class="import-header">
+      <span class="import-header-label" id="import-header-label">${pendingImport.length} songs · ${newCount} new · ${gc} with guitar</span>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-sm" onclick="setAllGuitar(true)" style="font-size:11px;padding:3px 8px;">All guitar</button>
+        <button class="btn btn-sm" onclick="setAllGuitar(false)" style="font-size:11px;padding:3px 8px;">Clear all</button>
+      </div>
+    </div>`;
+  pendingImport.forEach((s,i)=>{
+    const dup=existing.has(s.title.toLowerCase());
+    html+=`<div class="import-song-row" id="irow-${i}">
+      <div class="import-song-title" style="${dup?'color:var(--text3)':''}">${esc(s.title)}</div>
+      <div class="import-song-key">${esc(s.key)}</div>
+      ${dup?'<span style="font-size:11px;color:var(--text3);font-style:italic;white-space:nowrap;">exists</span>':''}
+      <button class="guitar-toggle ${s.guitar?'on':''}" onclick="toggleIG(${i})">
+        🎸 <span id="igl-${i}">${s.guitar?'Guitar':'No guitar'}</span>
+      </button>
     </div>`;
   });
-  html += '</div>';
-  document.getElementById('import-preview-area').innerHTML = html;
-  document.getElementById('import-btn').style.display = 'inline-flex';
+  html+='</div>';
+  document.getElementById('import-preview-area').innerHTML=html;
 }
 
-function doImport() {
-  const existingTitles = new Set(songs.map(s => s.title.toLowerCase()));
-  let added = 0;
-  pendingImport.forEach(s => {
-    if (!existingTitles.has(s.title.toLowerCase())) {
-      songs.push({ ...s, id: uid() });
-      added++;
-    }
+function toggleIG(i){
+  pendingImport[i].guitar=!pendingImport[i].guitar;
+  document.querySelector(`#irow-${i} .guitar-toggle`).classList.toggle('on',pendingImport[i].guitar);
+  document.getElementById(`igl-${i}`).textContent=pendingImport[i].guitar?'Guitar':'No guitar';
+  updateImportHeader();
+}
+
+function setAllGuitar(val){
+  pendingImport.forEach((s,i)=>{
+    s.guitar=val;
+    const btn=document.querySelector(`#irow-${i} .guitar-toggle`);
+    if(btn){btn.classList.toggle('on',val);document.getElementById(`igl-${i}`).textContent=val?'Guitar':'No guitar';}
   });
-  save();
-  clearImport();
-  renderSongs();
-  toast(`${added} song${added !== 1 ? 's' : ''} imported`);
+  updateImportHeader();
+}
+
+function updateImportHeader(){
+  const existing=new Set(songs.map(s=>s.title.toLowerCase()));
+  const nc=pendingImport.filter(s=>!existing.has(s.title.toLowerCase())).length;
+  const gc=pendingImport.filter(s=>s.guitar).length;
+  const el=document.getElementById('import-header-label');
+  if(el) el.textContent=`${pendingImport.length} songs · ${nc} new · ${gc} with guitar`;
+}
+
+function doImport(){
+  const existing=new Set(songs.map(s=>s.title.toLowerCase()));
+  let added=0;
+  pendingImport.forEach(s=>{if(!existing.has(s.title.toLowerCase())){songs.push({...s,id:uid()});added++;}});
+  save(); clearImport(); renderSongs();
+  toast(`${added} song${added!==1?'s':''} imported`);
   document.querySelectorAll('.nav-tab')[0].click();
 }
 
-function clearImport() {
-  document.getElementById('import-text').value = '';
-  document.getElementById('import-preview-area').innerHTML = '';
-  document.getElementById('import-btn').style.display = 'none';
-  pendingImport = [];
-  document.getElementById('file-input').value = '';
+function clearImport(){
+  document.getElementById('import-text').value='';
+  document.getElementById('import-preview-area').innerHTML='';
+  document.getElementById('import-btn').style.display='none';
+  document.getElementById('clear-import-btn').style.display='none';
+  pendingImport=[];
+  document.getElementById('file-input').value='';
 }
 
-// Drag and drop
-const dz = document.getElementById('dropzone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-dz.addEventListener('drop', e => {
-  e.preventDefault(); dz.classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = ev => { document.getElementById('import-text').value = ev.target.result; previewImport(); };
-    reader.readAsText(file);
-  }
+const dz=document.getElementById('dropzone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('dragover');
+  const file=e.dataTransfer.files[0];
+  if(file){const r=new FileReader();r.onload=ev=>{document.getElementById('import-text').value=ev.target.result;previewImport();};r.readAsText(file);}
 });
 
-// ─── UTILS ───────────────────────────────────────────────────────────────────
-
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-let toastTimer;
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
-}
-
-// Modal keyboard
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-  if (e.key === 'Enter' && document.getElementById('song-modal').style.display !== 'none') {
-    if (document.activeElement.tagName !== 'TEXTAREA') saveSong();
-  }
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+let tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2000);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeModal();
+  if(e.key==='Enter'&&document.getElementById('song-modal').style.display!=='none'&&document.activeElement.tagName!=='TEXTAREA')saveSong();
 });
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-
-load();
-populateKeySelect('m-key');
-renderSongs();
-initHarmony();
+load(); populateKeySelect('m-key'); renderSongs(); initHarmony();
 </script>
 </body>
 </html>
